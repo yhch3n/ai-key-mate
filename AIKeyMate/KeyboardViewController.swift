@@ -11,7 +11,10 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
 
     @IBOutlet var nextKeyboardButton: UIButton!
     private let containerView = UIView()
+    private let buttonStackView = UIStackView()
     private let sendButton = UIButton(type: .system)
+    private let copyButton = UIButton(type: .system)
+    private let pasteButton = UIButton(type: .system)
     private let inputScrollView = UITextView()
     private let gptResScrollView = UIScrollView()
     private let gptResLabel = UILabel()
@@ -42,10 +45,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
         // Set the desired height for your keyboard extension
-        self.view.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 1).isActive = true
+        self.view.heightAnchor.constraint(equalToConstant: 350).isActive = true
         
         setupContainerView()
-        setupButton()
+        setupButtons()
+        setupButtonStackView()
         setupInputScrollView()
         setupGptResScrollView()
         setupConstraints()
@@ -80,28 +84,137 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         containerView.backgroundColor = .white
         view.addSubview(containerView)
     }
+
+    private func setupButtonStackView() {
+        buttonStackView.axis = .horizontal
+        buttonStackView.alignment = .fill
+        buttonStackView.distribution = .fillEqually
+        buttonStackView.spacing = 5
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(buttonStackView)
+
+        // Add buttons to the stack view
+        buttonStackView.addArrangedSubview(copyButton)
+        buttonStackView.addArrangedSubview(pasteButton)
+        buttonStackView.addArrangedSubview(sendButton)
+    }
     
-    private func setupButton() {
-        sendButton.setTitle("Send to ChatGPT!", for: .normal)
-        sendButton.setTitleColor(.systemMint, for: .normal)
-        sendButton.backgroundColor = .white
+    private func setupButtons() {
+        sendButton.setTitle("Gen!", for: .normal)
+        sendButton.setTitleColor(.white, for: .normal)
+        sendButton.backgroundColor = .systemMint
         sendButton.layer.cornerRadius = 5
         sendButton.layer.borderWidth = 1
         sendButton.layer.borderColor = UIColor.systemMint.cgColor
         sendButton.translatesAutoresizingMaskIntoConstraints = false
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
-        containerView.addSubview(sendButton)
+
+        // Configure and add copyButton
+        copyButton.setTitle("Copy Response", for: .normal)
+        copyButton.setTitleColor(.systemMint, for: .normal)
+        copyButton.backgroundColor = .white
+        copyButton.layer.cornerRadius = 5
+        copyButton.layer.borderWidth = 1
+        copyButton.layer.borderColor = UIColor.systemMint.cgColor
+        copyButton.translatesAutoresizingMaskIntoConstraints = false
+        copyButton.addTarget(self, action: #selector(copyButtonTapped), for: .touchUpInside)
+
+        // Configure and add pasteButton
+        pasteButton.setTitle("Paste Text", for: .normal)
+        pasteButton.setTitleColor(.systemMint, for: .normal)
+        pasteButton.backgroundColor = .white
+        pasteButton.layer.cornerRadius = 5
+        pasteButton.layer.borderWidth = 1
+        pasteButton.layer.borderColor = UIColor.systemMint.cgColor
+        pasteButton.translatesAutoresizingMaskIntoConstraints = false
+        pasteButton.addTarget(self, action: #selector(pasteButtonTapped), for: .touchUpInside)
+    }
+
+    private func createCustomAlertView() -> UIView {
+        let customAlertView = UIView()
+        customAlertView.backgroundColor = UIColor.white
+        customAlertView.layer.cornerRadius = 10
+        customAlertView.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLabel = UILabel()
+        titleLabel.text = "Full Access Required"
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        customAlertView.addSubview(titleLabel)
+
+        let messageLabel = UILabel()
+        messageLabel.text = "Please go to Settings -> General -> Keyboard -> Keyboards and enable Full Access for this keyboard to use the copy/paste feature."
+        messageLabel.font = UIFont.systemFont(ofSize: 14)
+        messageLabel.numberOfLines = 0
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        customAlertView.addSubview(messageLabel)
+
+        let okButton = UIButton(type: .system)
+        okButton.setTitle("OK", for: .normal)
+        okButton.addTarget(self, action: #selector(dismissFullAccessAlert), for: .touchUpInside)
+        okButton.translatesAutoresizingMaskIntoConstraints = false
+        customAlertView.addSubview(okButton)
+
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: customAlertView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: customAlertView.topAnchor, constant: 8),
+
+            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            messageLabel.leadingAnchor.constraint(equalTo: customAlertView.leadingAnchor, constant: 8),
+            messageLabel.trailingAnchor.constraint(equalTo: customAlertView.trailingAnchor, constant: -8),
+
+            okButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
+            okButton.centerXAnchor.constraint(equalTo: customAlertView.centerXAnchor),
+            okButton.bottomAnchor.constraint(equalTo: customAlertView.bottomAnchor, constant: -8)
+        ])
+
+        return customAlertView
     }
     
-    @objc private func sendButtonTapped() {
-        // Get the input text from the textView
-        let inputText = inputScrollView.text
+    private func showFullAccessAlert() {
+        let customAlertView = createCustomAlertView()
+        customAlertView.tag = 999 // Assign a tag for easy dismissal
+        containerView.addSubview(customAlertView)
 
-        // Call the ViewModel's sendQuery function with the input text
+        NSLayoutConstraint.activate([
+            customAlertView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            customAlertView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            customAlertView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8)
+        ])
+    }
+
+    @objc func dismissFullAccessAlert() {
+        if let customAlertView = containerView.viewWithTag(999) {
+            customAlertView.removeFromSuperview()
+        }
+    }
+
+    @objc private func sendButtonTapped() {
+        let inputText = inputScrollView.text
         apiViewModel.sendQuery(input: inputText!) { response in
-            // Handle the response from the OpenAI API (e.g., display it in the UI)
-            print("OpenAI API response: \(response)")
             self.gptResLabel.text = response
+        }
+    }
+
+    @objc private func pasteButtonTapped() {
+        if self.hasFullAccess {
+            let pasteboard = UIPasteboard.general
+            if let copiedText = pasteboard.string {
+                inputScrollView.insertText(copiedText)
+            }
+        } else {
+            showFullAccessAlert()
+        }
+    }
+
+    @objc func copyButtonTapped() {
+        if self.hasFullAccess {
+            if let responseText = gptResLabel.text {
+                print("responseText: \(responseText)")
+                UIPasteboard.general.string = responseText
+            }
+        } else {
+            showFullAccessAlert()
         }
     }
 
@@ -116,7 +229,6 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         inputScrollView.delegate = self
         inputScrollView.setPlaceholder(text: "Copy/Paste text here...")
         inputScrollView.backgroundColor = .white
-        
         containerView.addSubview(inputScrollView)
         setupResLabel()
     }
@@ -126,7 +238,6 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         gptResScrollView.layer.cornerRadius = 5
         gptResScrollView.layer.borderWidth = 1
         gptResScrollView.layer.borderColor = UIColor.systemGray5.cgColor
-        
         gptResScrollView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(gptResScrollView)
     }
@@ -148,11 +259,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             containerView.heightAnchor.constraint(equalTo: self.view.heightAnchor),
             containerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             
-            // Button constraints
-            sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.15),
-            sendButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
-            sendButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            sendButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5),
+            // Add constraints for buttonStackView
+            buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5),
+            buttonStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            buttonStackView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.15),
+            buttonStackView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
 
             // ScrollView constraints
             inputScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),

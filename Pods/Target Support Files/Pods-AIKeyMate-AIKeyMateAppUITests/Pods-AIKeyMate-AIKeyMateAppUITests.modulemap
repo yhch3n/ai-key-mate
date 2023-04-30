@@ -1,0 +1,6 @@
+framework module Pods_AIKeyMate_AIKeyMateAppUITests {
+  umbrella header "Pods-AIKeyMate-AIKeyMateAppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

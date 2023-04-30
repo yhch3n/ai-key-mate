@@ -1,0 +1,6 @@
+framework module Pods_AIKeyMate {
+  umbrella header "Pods-AIKeyMate-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -14,6 +14,9 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private let sendButton = UIButton(type: .system)
     private let inputScrollView = UITextView()
     private let gptResScrollView = UIScrollView()
+    private let gptResLabel = UILabel()
+
+    private let apiViewModel = APIViewModel()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
@@ -86,9 +89,22 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         sendButton.layer.borderWidth = 1
         sendButton.layer.borderColor = UIColor.systemMint.cgColor
         sendButton.translatesAutoresizingMaskIntoConstraints = false
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         containerView.addSubview(sendButton)
     }
     
+    @objc private func sendButtonTapped() {
+        // Get the input text from the textView
+        let inputText = inputScrollView.text
+
+        // Call the ViewModel's sendQuery function with the input text
+        apiViewModel.sendQuery(input: inputText!) { response in
+            // Handle the response from the OpenAI API (e.g., display it in the UI)
+            print("OpenAI API response: \(response)")
+            self.gptResLabel.text = response
+        }
+    }
+
     private func setupInputScrollView() {
         inputScrollView.backgroundColor = .white
         inputScrollView.layer.cornerRadius = 5
@@ -102,6 +118,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         inputScrollView.backgroundColor = .white
         
         containerView.addSubview(inputScrollView)
+        setupResLabel()
     }
 
     private func setupGptResScrollView() {
@@ -113,7 +130,15 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         gptResScrollView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(gptResScrollView)
     }
-    
+
+    private func setupResLabel() {
+        gptResLabel.translatesAutoresizingMaskIntoConstraints = false
+        gptResLabel.numberOfLines = 0
+        gptResLabel.font = UIFont.systemFont(ofSize: 14)
+        gptResLabel.textColor = inputScrollView.textColor
+        gptResScrollView.addSubview(gptResLabel)
+    }
+
     private func setupConstraints() {
 
         NSLayoutConstraint.activate([
@@ -138,7 +163,12 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             gptResScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             gptResScrollView.bottomAnchor.constraint(equalTo: inputScrollView.topAnchor, constant: -5),
             gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.35),
-            gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95)
+            gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
+
+            gptResLabel.topAnchor.constraint(equalTo: gptResScrollView.topAnchor),
+            gptResLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
+            gptResLabel.trailingAnchor.constraint(equalTo: gptResScrollView.trailingAnchor),
+            gptResLabel.bottomAnchor.constraint(equalTo: gptResScrollView.bottomAnchor)
         ])
     }
 

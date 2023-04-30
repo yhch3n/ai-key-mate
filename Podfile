@@ -6,6 +6,7 @@ target 'AIKeyMate' do
   use_frameworks!
 
   # Pods for AIKeyMate
+  pod 'Alamofire'
 
   target 'AIKeyMateAppTests' do
     # Pods for testing
@@ -22,14 +23,5 @@ target 'AIKeyMateApp' do
   use_frameworks!
 
   # Pods for AIKeyMateApp
-
-  target 'AIKeyMateAppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'AIKeyMateAppUITests' do
-    # Pods for testing
-  end
 
 end

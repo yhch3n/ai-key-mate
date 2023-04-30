@@ -14,6 +14,9 @@
 		72D7C2A929E37B4200E7FC31 /* AIKeyMateAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7C2A829E37B4200E7FC31 /* AIKeyMateAppTests.swift */; };
 		72D7C2B329E37B4200E7FC31 /* AIKeyMateAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7C2B229E37B4200E7FC31 /* AIKeyMateAppUITests.swift */; };
 		72D7C2B529E37B4200E7FC31 /* AIKeyMateAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7C2B429E37B4200E7FC31 /* AIKeyMateAppUITestsLaunchTests.swift */; };
+		72D7C2C829E37B6400E7FC31 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7C2C729E37B6400E7FC31 /* KeyboardViewController.swift */; };
+		72D7C2CC29E37B6400E7FC31 /* AIKeyMate.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 72D7C2C529E37B6400E7FC31 /* AIKeyMate.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		72D7C2E929ECD2FF00E7FC31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72D7C29B29E37B4200E7FC31 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +34,28 @@
 			remoteGlobalIDString = 72D7C29329E37B4000E7FC31;
 			remoteInfo = AIKeyMateApp;
 		};
+		72D7C2CA29E37B6400E7FC31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D7C28C29E37B4000E7FC31 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 72D7C2C429E37B6400E7FC31;
+			remoteInfo = AIKeyMate;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		72D7C2D029E37B6400E7FC31 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				72D7C2CC29E37B6400E7FC31 /* AIKeyMate.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		72D7C29429E37B4000E7FC31 /* AIKeyMateApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIKeyMateApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +68,12 @@
 		72D7C2AE29E37B4200E7FC31 /* AIKeyMateAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIKeyMateAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D7C2B229E37B4200E7FC31 /* AIKeyMateAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyMateAppUITests.swift; sourceTree = "<group>"; };
 		72D7C2B429E37B4200E7FC31 /* AIKeyMateAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyMateAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		72D7C2C529E37B6400E7FC31 /* AIKeyMate.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AIKeyMate.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		72D7C2C729E37B6400E7FC31 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		72D7C2C929E37B6400E7FC31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72D7C2E229E3A9BE00E7FC31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		72D7C2E729ECD20400E7FC31 /* AIKeyMateApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AIKeyMateApp.entitlements; sourceTree = "<group>"; };
+		72D7C2E829ECD26C00E7FC31 /* AIKeyMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AIKeyMate.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +98,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		72D7C2C229E37B6400E7FC31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,6 +114,7 @@
 				72D7C29629E37B4000E7FC31 /* AIKeyMateApp */,
 				72D7C2A729E37B4200E7FC31 /* AIKeyMateAppTests */,
 				72D7C2B129E37B4200E7FC31 /* AIKeyMateAppUITests */,
+				72D7C2C629E37B6400E7FC31 /* AIKeyMate */,
 				72D7C29529E37B4000E7FC31 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,6 +125,7 @@
 				72D7C29429E37B4000E7FC31 /* AIKeyMateApp.app */,
 				72D7C2A429E37B4200E7FC31 /* AIKeyMateAppTests.xctest */,
 				72D7C2AE29E37B4200E7FC31 /* AIKeyMateAppUITests.xctest */,
+				72D7C2C529E37B6400E7FC31 /* AIKeyMate.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,6 +133,8 @@
 		72D7C29629E37B4000E7FC31 /* AIKeyMateApp */ = {
 			isa = PBXGroup;
 			children = (
+				72D7C2E729ECD20400E7FC31 /* AIKeyMateApp.entitlements */,
+				72D7C2E229E3A9BE00E7FC31 /* Info.plist */,
 				72D7C29729E37B4000E7FC31 /* AIKeyMateAppApp.swift */,
 				72D7C29929E37B4000E7FC31 /* ContentView.swift */,
 				72D7C29B29E37B4200E7FC31 /* Assets.xcassets */,
@@ -127,6 +168,16 @@
 			path = AIKeyMateAppUITests;
 			sourceTree = "<group>";
 		};
+		72D7C2C629E37B6400E7FC31 /* AIKeyMate */ = {
+			isa = PBXGroup;
+			children = (
+				72D7C2E829ECD26C00E7FC31 /* AIKeyMate.entitlements */,
+				72D7C2C729E37B6400E7FC31 /* KeyboardViewController.swift */,
+				72D7C2C929E37B6400E7FC31 /* Info.plist */,
+			);
+			path = AIKeyMate;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,10 +188,12 @@
 				72D7C29029E37B4000E7FC31 /* Sources */,
 				72D7C29129E37B4000E7FC31 /* Frameworks */,
 				72D7C29229E37B4000E7FC31 /* Resources */,
+				72D7C2D029E37B6400E7FC31 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				72D7C2CB29E37B6400E7FC31 /* PBXTargetDependency */,
 			);
 			name = AIKeyMateApp;
 			productName = AIKeyMateApp;
@@ -183,6 +236,23 @@
 			productReference = 72D7C2AE29E37B4200E7FC31 /* AIKeyMateAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		72D7C2C429E37B6400E7FC31 /* AIKeyMate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72D7C2CD29E37B6400E7FC31 /* Build configuration list for PBXNativeTarget "AIKeyMate" */;
+			buildPhases = (
+				72D7C2C129E37B6400E7FC31 /* Sources */,
+				72D7C2C229E37B6400E7FC31 /* Frameworks */,
+				72D7C2C329E37B6400E7FC31 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AIKeyMate;
+			productName = AIKeyMate;
+			productReference = 72D7C2C529E37B6400E7FC31 /* AIKeyMate.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -204,6 +274,9 @@
 						CreatedOnToolsVersion = 14.2;
 						TestTargetID = 72D7C29329E37B4000E7FC31;
 					};
+					72D7C2C429E37B6400E7FC31 = {
+						CreatedOnToolsVersion = 14.2;
+					};
 				};
 			};
 			buildConfigurationList = 72D7C28F29E37B4000E7FC31 /* Build configuration list for PBXProject "AIKeyMateApp" */;
@@ -222,6 +295,7 @@
 				72D7C29329E37B4000E7FC31 /* AIKeyMateApp */,
 				72D7C2A329E37B4200E7FC31 /* AIKeyMateAppTests */,
 				72D7C2AD29E37B4200E7FC31 /* AIKeyMateAppUITests */,
+				72D7C2C429E37B6400E7FC31 /* AIKeyMate */,
 			);
 		};
 /* End PBXProject section */
@@ -247,6 +321,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72D7C2C329E37B6400E7FC31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72D7C2E929ECD2FF00E7FC31 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +361,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		72D7C2C129E37B6400E7FC31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72D7C2C829E37B6400E7FC31 /* KeyboardViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -292,12 +382,18 @@
 			target = 72D7C29329E37B4000E7FC31 /* AIKeyMateApp */;
 			targetProxy = 72D7C2AF29E37B4200E7FC31 /* PBXContainerItemProxy */;
 		};
+		72D7C2CB29E37B6400E7FC31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 72D7C2C429E37B6400E7FC31 /* AIKeyMate */;
+			targetProxy = 72D7C2CA29E37B6400E7FC31 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		72D7C2B629E37B4200E7FC31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -345,7 +441,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -358,6 +454,7 @@
 		72D7C2B729E37B4200E7FC31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -399,7 +496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -412,15 +509,17 @@
 		72D7C2B929E37B4200E7FC31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AIKeyMateApp/AIKeyMateApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AIKeyMateApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 93X7UMTL5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = AIKeyMateApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -441,15 +540,17 @@
 		72D7C2BA29E37B4200E7FC31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AIKeyMateApp/AIKeyMateApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AIKeyMateApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 93X7UMTL5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = AIKeyMateApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -543,6 +644,60 @@
 			};
 			name = Release;
 		};
+		72D7C2CE29E37B6400E7FC31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = AIKeyMate/AIKeyMate.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 93X7UMTL5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIKeyMate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AIKeyMate;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AIKeyMateApp.AIKeyMate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		72D7C2CF29E37B6400E7FC31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = AIKeyMate/AIKeyMate.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 93X7UMTL5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIKeyMate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AIKeyMate;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AIKeyMateApp.AIKeyMate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -578,6 +733,15 @@
 			buildConfigurations = (
 				72D7C2BF29E37B4200E7FC31 /* Debug */,
 				72D7C2C029E37B4200E7FC31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72D7C2CD29E37B6400E7FC31 /* Build configuration list for PBXNativeTarget "AIKeyMate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72D7C2CE29E37B6400E7FC31 /* Debug */,
+				72D7C2CF29E37B6400E7FC31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

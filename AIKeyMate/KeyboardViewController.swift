@@ -16,6 +16,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private let copyButton = UIButton(type: .system)
     private let pasteButton = UIButton(type: .system)
     private let inputScrollView = UITextView()
+    private let clearButton = UIButton(type: .custom)
     private let gptResScrollView = UIScrollView()
     private let gptResLabel = UILabel()
 
@@ -72,6 +73,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         setupButtons()
         setupButtonStackView()
         setupInputScrollView()
+        setupClearButton()
         setupGptResScrollView()
 
         setupDropDownMenu()
@@ -323,7 +325,23 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         inputScrollView.textAlignment = .left
         inputScrollView.font = UIFont.systemFont(ofSize: 14)
         containerView.addSubview(inputScrollView)
+        inputScrollView.addSubview(clearButton)
+
         setupResLabel()
+    }
+
+    private func setupClearButton() {
+        clearButton.setTitle("X", for: .normal)
+        clearButton.setTitleColor(.systemMint, for: .normal)
+        clearButton.backgroundColor = .white
+        clearButton.layer.cornerRadius = 10
+        clearButton.clipsToBounds = true
+        clearButton.translatesAutoresizingMaskIntoConstraints = false
+        clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+    }
+
+    @objc private func clearButtonTapped() {
+        inputScrollView.text = ""
     }
 
     private func setupGptResScrollView() {
@@ -387,6 +405,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             inputScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
             inputScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
             
+            clearButton.widthAnchor.constraint(equalToConstant: 20),
+            clearButton.heightAnchor.constraint(equalToConstant: 20),
+            clearButton.trailingAnchor.constraint(equalTo: pickerView.trailingAnchor, constant: -8),
+            clearButton.bottomAnchor.constraint(equalTo: pickerView.topAnchor, constant: -8),
+
             gptResScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             gptResScrollView.bottomAnchor.constraint(equalTo: inputScrollView.topAnchor, constant: -5),
             gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),

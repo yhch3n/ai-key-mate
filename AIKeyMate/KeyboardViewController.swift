@@ -27,6 +27,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     var selectedPromptValue: String?
 
     private var isLoadingPromptOptions = false
+    private var isLoadingAPIResponse = false
 
     private let apiViewModel = APIViewModel()
     
@@ -61,10 +62,9 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             // Update UI or perform other actions with the prompt options
             DispatchQueue.main.async {
                 self?.prompts = promptOptions
-                self?.pickerView.text = "Select a prompt."
+                self?.promptsTableView.reloadData()
                 self?.isLoadingPromptOptions = false
-                self?.setupFloatingContainerView()
-                self?.setupPromptsTableView()
+                self?.pickerView.text = " Select a prompt."
             }
         }
 
@@ -128,7 +128,9 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private func setupButtons() {
         sendButton.setTitle("Gen!", for: .normal)
         sendButton.setTitleColor(.white, for: .normal)
+        sendButton.titleLabel?.font = .systemFont(ofSize: 14)
         sendButton.backgroundColor = .systemMint
+        sendButton.setTitleColor(UIColor.systemGray5, for: .disabled)
         sendButton.layer.cornerRadius = 5
         sendButton.layer.borderWidth = 1
         sendButton.layer.borderColor = UIColor.systemMint.cgColor
@@ -138,6 +140,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         // Configure and add copyButton
         copyButton.setTitle("Copy Response", for: .normal)
         copyButton.setTitleColor(.systemMint, for: .normal)
+        copyButton.titleLabel?.font = .systemFont(ofSize: 14)
         copyButton.backgroundColor = .white
         copyButton.layer.cornerRadius = 5
         copyButton.layer.borderWidth = 1
@@ -148,6 +151,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         // Configure and add pasteButton
         pasteButton.setTitle("Paste Text", for: .normal)
         pasteButton.setTitleColor(.systemMint, for: .normal)
+        pasteButton.titleLabel?.font = .systemFont(ofSize: 14)
         pasteButton.backgroundColor = .white
         pasteButton.layer.cornerRadius = 5
         pasteButton.layer.borderWidth = 1
@@ -219,6 +223,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         // Setup promptLabel
         promptLabel.text = "Prompt: "
         promptLabel.textColor = .systemGray
+        promptLabel.font = UIFont.systemFont(ofSize: 14)
         promptLabel.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(promptLabel)
 
@@ -230,6 +235,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         pickerView.layer.borderColor = UIColor.systemGray5.cgColor
         pickerView.text = " Select a prompt"
         pickerView.textColor = .systemGray
+        pickerView.font = UIFont.systemFont(ofSize: 14)
         pickerView.isUserInteractionEnabled = true
         pickerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(togglePromptsTableView)))
         containerView.addSubview(pickerView)
@@ -257,6 +263,12 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     }
 
     @objc private func sendButtonTapped() {
+        guard !isLoadingAPIResponse else { return }
+
+        isLoadingAPIResponse = true
+        sendButton.isEnabled = false
+        gptResLabel.text = "Loading..."
+
         let inputText = inputScrollView.text
 
         let combinedText: String
@@ -269,6 +281,8 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         // Use the combinedText to query the OpenAI API
         apiViewModel.sendChatQuery(content: combinedText) { [weak self] response in
             DispatchQueue.main.async {
+                self?.isLoadingAPIResponse = false
+                self?.sendButton.isEnabled = true
                 self?.gptResLabel.text = response
             }
         }
@@ -306,6 +320,8 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         inputScrollView.delegate = self
         inputScrollView.setPlaceholder(text: "Paste text here...")
         inputScrollView.backgroundColor = .white
+        inputScrollView.textAlignment = .left
+        inputScrollView.font = UIFont.systemFont(ofSize: 14)
         containerView.addSubview(inputScrollView)
         setupResLabel()
     }
@@ -322,6 +338,8 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private func setupResLabel() {
         gptResLabel.translatesAutoresizingMaskIntoConstraints = false
         gptResLabel.numberOfLines = 0
+        gptResLabel.lineBreakMode = .byWordWrapping
+        gptResLabel.textAlignment = .left
         gptResLabel.font = UIFont.systemFont(ofSize: 14)
         gptResLabel.textColor = inputScrollView.textColor
         gptResScrollView.addSubview(gptResLabel)
@@ -343,12 +361,12 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             buttonStackView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
 
             // Add constraints for the prompts dropdown menu
-            promptLabel.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -3),
+            promptLabel.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -5),
             promptLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
             promptLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.18),
             promptLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
 
-            pickerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -3),
+            pickerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -5),
             pickerView.leadingAnchor.constraint(equalTo: promptLabel.trailingAnchor, constant: -0.5),
             pickerView.trailingAnchor.constraint(equalTo: buttonStackView.trailingAnchor),
             pickerView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
@@ -374,6 +392,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
             gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
 
+            gptResLabel.widthAnchor.constraint(equalTo: gptResScrollView.widthAnchor),
             gptResLabel.topAnchor.constraint(equalTo: gptResScrollView.topAnchor),
             gptResLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
             gptResLabel.trailingAnchor.constraint(equalTo: gptResScrollView.trailingAnchor),
@@ -418,12 +437,14 @@ extension KeyboardViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = prompts[indexPath.row].key
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+        cell.textLabel?.textColor = .systemGray
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedPromptOption = prompts[indexPath.row]
-        pickerView.text = selectedPromptOption.key
+        pickerView.text = " " + selectedPromptOption.key
         selectedPromptValue = selectedPromptOption.value
 
         tableView.deselectRow(at: indexPath, animated: true)

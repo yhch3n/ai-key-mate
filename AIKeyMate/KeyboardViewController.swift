@@ -19,6 +19,12 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private let gptResScrollView = UIScrollView()
     private let gptResLabel = UILabel()
 
+    private let promptLabel = UILabel()
+    private let pickerView = UILabel()
+    private let floatingContainerView = UIView()
+    private let promptsTableView = UITableView()
+    private var prompts: [String] = ["Option 1", "Option 2", "Option 3"]
+
     private let apiViewModel = APIViewModel()
     
     override func updateViewConstraints() {
@@ -52,6 +58,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         setupButtonStackView()
         setupInputScrollView()
         setupGptResScrollView()
+
+        setupDropDownMenu()
+        setupFloatingContainerView()
+        setupPromptsTableView()
+
         setupConstraints()
     }
     
@@ -189,6 +200,45 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         }
     }
 
+    private func setupDropDownMenu() {
+        // Setup promptLabel
+        promptLabel.text = "Prompt: "
+        promptLabel.textColor = .systemGray
+        promptLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(promptLabel)
+
+        // Setup pickerView
+        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        pickerView.backgroundColor = .white
+        pickerView.layer.cornerRadius = 5
+        pickerView.layer.borderWidth = 1
+        pickerView.layer.borderColor = UIColor.systemGray5.cgColor
+        pickerView.text = " Select an prompt"
+        pickerView.textColor = .systemGray
+        pickerView.isUserInteractionEnabled = true
+        pickerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(togglePromptsTableView)))
+        containerView.addSubview(pickerView)
+    }
+    private func setupFloatingContainerView() {
+        floatingContainerView.isHidden = true
+        floatingContainerView.backgroundColor = UIColor.yellow
+        floatingContainerView.layer.borderColor = UIColor.gray.cgColor
+        floatingContainerView.layer.borderWidth = 1
+        floatingContainerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(floatingContainerView)
+    }
+    private func setupPromptsTableView() {
+        promptsTableView.delegate = self
+        promptsTableView.dataSource = self
+        promptsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        promptsTableView.translatesAutoresizingMaskIntoConstraints = false
+        floatingContainerView.addSubview(promptsTableView)
+    }
+    @objc private func togglePromptsTableView() {
+        print("togglePromptsTableView")
+        floatingContainerView.isHidden.toggle()
+    }
+
     @objc private func sendButtonTapped() {
         let inputText = inputScrollView.text
         apiViewModel.sendQuery(input: inputText!) { response in
@@ -227,7 +277,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
 
         // Set the text field's delegate to the view controller.
         inputScrollView.delegate = self
-        inputScrollView.setPlaceholder(text: "Copy/Paste text here...")
+        inputScrollView.setPlaceholder(text: "Paste text here...")
         inputScrollView.backgroundColor = .white
         containerView.addSubview(inputScrollView)
         setupResLabel()
@@ -262,18 +312,39 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             // Add constraints for buttonStackView
             buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5),
             buttonStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            buttonStackView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.15),
+            buttonStackView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.1),
             buttonStackView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
+
+            // Add constraints for the prompts dropdown menu
+            promptLabel.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -3),
+            promptLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
+            promptLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.18),
+            promptLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
+
+            pickerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -3),
+            pickerView.leadingAnchor.constraint(equalTo: promptLabel.trailingAnchor, constant: -0.5),
+            pickerView.trailingAnchor.constraint(equalTo: buttonStackView.trailingAnchor),
+            pickerView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
+
+            floatingContainerView.bottomAnchor.constraint(equalTo: pickerView.topAnchor, constant: -5),
+            floatingContainerView.leadingAnchor.constraint(equalTo: pickerView.leadingAnchor),
+            floatingContainerView.trailingAnchor.constraint(equalTo: buttonStackView.trailingAnchor),
+            floatingContainerView.heightAnchor.constraint(equalToConstant: 150),
+
+            promptsTableView.topAnchor.constraint(equalTo: floatingContainerView.topAnchor),
+            promptsTableView.leadingAnchor.constraint(equalTo: floatingContainerView.leadingAnchor),
+            promptsTableView.trailingAnchor.constraint(equalTo: floatingContainerView.trailingAnchor),
+            promptsTableView.bottomAnchor.constraint(equalTo: floatingContainerView.bottomAnchor),
 
             // ScrollView constraints
             inputScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            inputScrollView.bottomAnchor.constraint(equalTo: sendButton.topAnchor, constant: -5),
-            inputScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.35),
+            inputScrollView.bottomAnchor.constraint(equalTo: pickerView.topAnchor, constant: -5),
+            inputScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
             inputScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
             
             gptResScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             gptResScrollView.bottomAnchor.constraint(equalTo: inputScrollView.topAnchor, constant: -5),
-            gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.35),
+            gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
             gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
 
             gptResLabel.topAnchor.constraint(equalTo: gptResScrollView.topAnchor),
@@ -307,7 +378,25 @@ extension KeyboardViewController {
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.setPlaceholder(text: "Copy/Paste text here...")
+            textView.setPlaceholder(text: "Paste text here...")
         }
+    }
+}
+
+extension KeyboardViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return prompts.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = prompts[indexPath.row]
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        pickerView.text = prompts[indexPath.row]
+        togglePromptsTableView()
     }
 }

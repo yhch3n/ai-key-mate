@@ -23,7 +23,10 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private let pickerView = UILabel()
     private let floatingContainerView = UIView()
     private let promptsTableView = UITableView()
-    private var prompts: [String] = ["Option 1", "Option 2", "Option 3"]
+    var prompts: [PromptOption] = []
+    var selectedPromptValue: String?
+
+    private var isLoadingPromptOptions = false
 
     private let apiViewModel = APIViewModel()
     
@@ -53,6 +56,18 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         // Set the desired height for your keyboard extension
         self.view.heightAnchor.constraint(equalToConstant: 350).isActive = true
         
+        pickerView.text = "Loading..."
+        apiViewModel.loadPromptOptions { [weak self] promptOptions in
+            // Update UI or perform other actions with the prompt options
+            DispatchQueue.main.async {
+                self?.prompts = promptOptions
+                self?.pickerView.text = "Select a prompt."
+                self?.isLoadingPromptOptions = false
+                self?.setupFloatingContainerView()
+                self?.setupPromptsTableView()
+            }
+        }
+
         setupContainerView()
         setupButtons()
         setupButtonStackView()
@@ -213,7 +228,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         pickerView.layer.cornerRadius = 5
         pickerView.layer.borderWidth = 1
         pickerView.layer.borderColor = UIColor.systemGray5.cgColor
-        pickerView.text = " Select an prompt"
+        pickerView.text = " Select a prompt"
         pickerView.textColor = .systemGray
         pickerView.isUserInteractionEnabled = true
         pickerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(togglePromptsTableView)))
@@ -228,6 +243,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         containerView.addSubview(floatingContainerView)
     }
     private func setupPromptsTableView() {
+        promptsTableView.isHidden = true
         promptsTableView.delegate = self
         promptsTableView.dataSource = self
         promptsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -235,14 +251,26 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         floatingContainerView.addSubview(promptsTableView)
     }
     @objc private func togglePromptsTableView() {
-        print("togglePromptsTableView")
+        guard !isLoadingPromptOptions else { return }
+        promptsTableView.isHidden.toggle()
         floatingContainerView.isHidden.toggle()
     }
 
     @objc private func sendButtonTapped() {
         let inputText = inputScrollView.text
-        apiViewModel.sendQuery(input: inputText!) { response in
-            self.gptResLabel.text = response
+
+        let combinedText: String
+        if let selectedPromptValue = selectedPromptValue {
+            combinedText = selectedPromptValue + " " + (inputText ?? "")
+        } else {
+            combinedText = inputText ?? ""
+        }
+
+        // Use the combinedText to query the OpenAI API
+        apiViewModel.sendChatQuery(content: combinedText) { [weak self] response in
+            DispatchQueue.main.async {
+                self?.gptResLabel.text = response
+            }
         }
     }
 
@@ -260,7 +288,6 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     @objc func copyButtonTapped() {
         if self.hasFullAccess {
             if let responseText = gptResLabel.text {
-                print("responseText: \(responseText)")
                 UIPasteboard.general.string = responseText
             }
         } else {
@@ -390,13 +417,16 @@ extension KeyboardViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = prompts[indexPath.row]
+        cell.textLabel?.text = prompts[indexPath.row].key
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedPromptOption = prompts[indexPath.row]
+        pickerView.text = selectedPromptOption.key
+        selectedPromptValue = selectedPromptOption.value
+
         tableView.deselectRow(at: indexPath, animated: true)
-        pickerView.text = prompts[indexPath.row]
         togglePromptsTableView()
     }
 }

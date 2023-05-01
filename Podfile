@@ -7,6 +7,7 @@ target 'AIKeyMate' do
 
   # Pods for AIKeyMate
   pod 'Alamofire'
+  pod 'SwiftyJSON', '~> 5.0'
 
   target 'AIKeyMateAppTests' do
     # Pods for testing

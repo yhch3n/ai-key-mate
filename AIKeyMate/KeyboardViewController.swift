@@ -17,8 +17,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
     private let pasteButton = UIButton(type: .system)
     private let inputScrollView = UITextView()
     private let clearButton = UIButton(type: .custom)
-    private let gptResScrollView = UIScrollView()
-    private let gptResLabel = UILabel()
+    private let gptResScrollView = UITextView()
 
     private let promptLabel = UILabel()
     private let pickerView = UILabel()
@@ -269,7 +268,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
 
         isLoadingAPIResponse = true
         sendButton.isEnabled = false
-        gptResLabel.text = "Loading..."
+        gptResScrollView.text = "Loading..."
 
         let inputText = inputScrollView.text
 
@@ -285,7 +284,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             DispatchQueue.main.async {
                 self?.isLoadingAPIResponse = false
                 self?.sendButton.isEnabled = true
-                self?.gptResLabel.text = response
+                self?.gptResScrollView.text = response
             }
         }
     }
@@ -303,7 +302,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
 
     @objc func copyButtonTapped() {
         if self.hasFullAccess {
-            if let responseText = gptResLabel.text {
+            if let responseText = gptResScrollView.text {
                 UIPasteboard.general.string = responseText
             }
         } else {
@@ -326,8 +325,6 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         inputScrollView.font = UIFont.systemFont(ofSize: 14)
         containerView.addSubview(inputScrollView)
         inputScrollView.addSubview(clearButton)
-
-        setupResLabel()
     }
 
     private func setupClearButton() {
@@ -349,18 +346,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
         gptResScrollView.layer.cornerRadius = 5
         gptResScrollView.layer.borderWidth = 1
         gptResScrollView.layer.borderColor = UIColor.systemGray5.cgColor
+        gptResScrollView.textAlignment = .left
+        gptResScrollView.font = UIFont.systemFont(ofSize: 14)
+        gptResScrollView.textColor = inputScrollView.textColor
         gptResScrollView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(gptResScrollView)
-    }
-
-    private func setupResLabel() {
-        gptResLabel.translatesAutoresizingMaskIntoConstraints = false
-        gptResLabel.numberOfLines = 0
-        gptResLabel.lineBreakMode = .byWordWrapping
-        gptResLabel.textAlignment = .left
-        gptResLabel.font = UIFont.systemFont(ofSize: 14)
-        gptResLabel.textColor = inputScrollView.textColor
-        gptResScrollView.addSubview(gptResLabel)
     }
 
     private func setupConstraints() {
@@ -381,11 +371,11 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             // Add constraints for the prompts dropdown menu
             promptLabel.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -5),
             promptLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
-            promptLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.18),
+            promptLabel.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.15),
             promptLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
 
             pickerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -5),
-            pickerView.leadingAnchor.constraint(equalTo: promptLabel.trailingAnchor, constant: -0.5),
+            pickerView.leadingAnchor.constraint(equalTo: promptLabel.trailingAnchor),
             pickerView.trailingAnchor.constraint(equalTo: buttonStackView.trailingAnchor),
             pickerView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.13),
 
@@ -413,13 +403,7 @@ class KeyboardViewController: UIInputViewController, UITextViewDelegate {
             gptResScrollView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             gptResScrollView.bottomAnchor.constraint(equalTo: inputScrollView.topAnchor, constant: -5),
             gptResScrollView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
-            gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95),
-
-            gptResLabel.widthAnchor.constraint(equalTo: gptResScrollView.widthAnchor),
-            gptResLabel.topAnchor.constraint(equalTo: gptResScrollView.topAnchor),
-            gptResLabel.leadingAnchor.constraint(equalTo: gptResScrollView.leadingAnchor),
-            gptResLabel.trailingAnchor.constraint(equalTo: gptResScrollView.trailingAnchor),
-            gptResLabel.bottomAnchor.constraint(equalTo: gptResScrollView.bottomAnchor)
+            gptResScrollView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.95)
         ])
     }
 
